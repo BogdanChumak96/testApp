@@ -1,5 +1,14 @@
 {
   "compilerOptions": {
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "strictPropertyInitialization": false,
+    "skipLibCheck": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "allowJs": true,
+    "checkJs": false,
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
