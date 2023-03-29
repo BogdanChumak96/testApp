@@ -6,7 +6,7 @@ axios.defaults.baseURL = API_URL;
 
 export const productService = {
   async getAll() {
-    return axios.get("/products", {});
+    return axios.get("/products");
   },
   async getOne(id) {
     return axios.get(`/products/${id}`);

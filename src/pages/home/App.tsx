@@ -14,7 +14,6 @@ import { useEffect, useState } from "react";
 export const Home = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const filteredItems = useAppSelector(selectFilteredItems);
-  const filteredValue = useAppSelector((state) => state.product.filterValue);
   const items = useAppSelector((state) => state.product.allProducts);
   const { id } = useParams();
 
@@ -30,17 +29,14 @@ export const Home = (): JSX.Element => {
     error,
   } = useQuery("product list", () => productService.getAll(), {
     onSuccess: (data) => {
-      dispatch(setProducts(response?.data.products));
+      dispatch(setProducts(data?.data.products));
     },
   });
 
   return (
     <Layout>
       <div className="container mx-auto py-10">
-        <ItemList
-          products={filteredItems}
-          isSuccess={isSuccess}
-        />
+        <ItemList products={filteredItems} isSuccess={isSuccess} />
       </div>
     </Layout>
   );

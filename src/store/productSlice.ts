@@ -6,7 +6,7 @@ import type { RootState } from "./store";
 interface ProductState {
   value: number;
   showInput: boolean;
-  allProducts: string[];
+  allProducts: any;
   favorites: any;
   filterValue: string;
 }

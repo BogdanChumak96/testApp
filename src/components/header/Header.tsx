@@ -16,8 +16,6 @@ const Header = () => {
     dispatch(setFilterValue(event.target.value));
   };
 
-  useEffect(() => {}, []);
-
   return (
     <div
       className="
