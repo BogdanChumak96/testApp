@@ -44,7 +44,7 @@ const Header = () => {
         items-center 
         align-center
         justify-center
-        gap-4
+        gap-2
         shadow-xl
       bg-gray-300"
     >
@@ -68,18 +68,22 @@ const Header = () => {
             <div className="flex gap-2">
               <BiChevronUp
                 onClick={() => handleSortChange("PRICE_ASC")}
+                className="transform cursor-pointer hover:scale-125 transition-all duration-300"
                 size={32}
               />
               <BiChevronDown
                 onClick={() => handleSortChange("PRICE_DESC")}
+                className="transform cursor-pointer hover:scale-125 transition-all duration-300"
                 size={32}
               />
               <RxLetterCaseCapitalize
                 onClick={() => handleSortChange("ALPHABETICAL_ASC")}
+                className="transform cursor-pointer hover:scale-125 transition-all duration-300"
                 size={22}
               />
               <RxLetterCaseLowercase
                 onClick={() => handleSortChange("ALPHABETICAL_DECS")}
+                className="transform cursor-pointer hover:scale-125 transition-all duration-300"
                 size={22}
               />
             </div>
@@ -118,13 +122,22 @@ const Header = () => {
         />
       )}
       <Link to="/">
-        <BiHomeAlt2 size={40} />
+        <BiHomeAlt2
+          className="transform hover:scale-125 transition-all duration-300"
+          size={40}
+        />
       </Link>
       <Link to="/cart">
-        <BiCartAlt size={40} />
+        <BiCartAlt
+          className="transform hover:scale-125 transition-all duration-300"
+          size={40}
+        />
       </Link>
       <Link to="/add">
-        <BiAddToQueue size={40} />
+        <BiAddToQueue
+          className="transform hover:scale-125 transition-all duration-300"
+          size={40}
+        />
       </Link>
     </div>
   );

@@ -22,6 +22,7 @@ export const CartList = ({ products }): JSX.Element => {
       ))}
       <div className="relative bottom-0 right-0  mx-auto cursor-pointer ">
         <TbBucketOff
+          className="transform cursor-pointer hover:scale-125 transition-all duration-300"
           onClick={() => {
             dispatch(clearCart());
           }}

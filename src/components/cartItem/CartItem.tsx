@@ -21,7 +21,7 @@ export const CartItem = ({ product }) => {
       <h3 className="w-1/6 text-center">{product.category}</h3>
       <h3 className="w-1/6 text-center">{product.stock}</h3>
       <BiXCircle
-        className="cursor-pointer"
+        className="transform cursor-pointer hover:scale-125 transition-all duration-300 "
         onClick={() => dispatch(removeFromFavorites(product.id))}
         size={30}
       />

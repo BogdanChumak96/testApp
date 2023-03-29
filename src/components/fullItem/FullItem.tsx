@@ -1,12 +1,28 @@
 import { BiPlus } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import { addToFavorites } from "../../store/productSlice";
+import { addToFavorites, deleteById } from "../../store/productSlice";
 import { useAppDispatch } from "../../services/hooks";
+import { RiDeleteBin2Line } from "react-icons/ri";
+import { useMutation, useQueryClient } from "react-query";
+import { productService } from "../../services/product";
 
 type Props = {};
 
 export const FullItem = ({ product }: any): JSX.Element => {
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+  const deleteProductMutation = useMutation(productService.deleteById, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("product list");
+    },
+  });
+
+  const handleDeleteItem = async (id) => {
+    await deleteProductMutation.mutate(id);
+    dispatch(deleteById(id));
+    console.log("deleted item", id);
+  };
+
   return (
     <div
       className="rounded-2xl
@@ -15,6 +31,7 @@ export const FullItem = ({ product }: any): JSX.Element => {
         flex-col 
         text-center 
         mx-auto 
+        relative
         px-10
         py-20
         mt-10
@@ -30,12 +47,19 @@ export const FullItem = ({ product }: any): JSX.Element => {
         height={400}
         src={product.images[0]}
       />
+      <RiDeleteBin2Line
+        size={35}
+        onClick={() => {
+          handleDeleteItem(product.id);
+        }}
+        className="absolute cursor-pointer text-black transform hover:scale-125 transition-all duration-300 hover:text-red-500  top-30 right-20"
+      />
       <p className="italic">{product.description}</p>
       <div className="flex items-center">
         <h5 className="font-bold">{product.price}$</h5>
         <BiPlus
           onClick={() => dispatch(addToFavorites(product))}
-          className="hover:bg-gray-400 rounded-md ml-3 transition ease-in-out delay-150 cursor-pointer"
+          className="hover:text-gray-300  rounded-md ml-3 transform hover:scale-125 transition-all duration-300  cursor-pointer"
           size={30}
         />
       </div>

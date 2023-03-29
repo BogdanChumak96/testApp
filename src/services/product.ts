@@ -11,4 +11,7 @@ export const productService = {
   async getOne(id) {
     return axios.get(`/products/${id}`);
   },
+  async deleteById(id) {
+    return axios.delete(`/products/${id}`);
+  },
 };

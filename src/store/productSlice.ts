@@ -41,6 +41,11 @@ const productSlice = createSlice({
         ? (state.showInput = true)
         : (state.showInput = false);
     },
+    deleteById: (state, action) => {
+      state.allProducts = state.allProducts.filter(
+        (item) => item.id !== action.payload
+      );
+    },
     setProducts: (state, action) => {
       const newProducts = action.payload.filter((product) => {
         return !state.allProducts.some(
@@ -79,6 +84,7 @@ export const {
   setFilterValue,
   setCategory,
   clearCart,
+  deleteById,
   setSortValue,
 } = productSlice.actions;
 

@@ -1,19 +1,70 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout/Layout";
 import { toggleShowInput } from "../../store/productSlice";
 import { useAppDispatch } from "../../services/hooks";
+import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
+import * as Yup from "yup";
+import { useMutation, useQueryClient } from "react-query";
+import { productService } from "../../services/product";
 
-type Props = {};
+const validationSchema = Yup.object().shape({
+  category: Yup.string().required("Category is required"),
+  description: Yup.string().required("Description is required"),
+  url: Yup.string().required("URL is required"),
+  price: Yup.number().required("Price is required"),
+  rating: Yup.number().required("Rating is required"),
+  stock: Yup.number().required("Title is required"),
+  title: Yup.string().required("Title is required"),
+});
+
+const initialValues = {
+  category: "",
+  description: "",
+  url: "",
+  price: "",
+  rating: "",
+  title: "",
+  stock: "",
+};
 
 export const AddProduct = (props: Props) => {
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+  const [formData, setFormData] = useState(initialValues);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    addProductMutation.mutate(formData);
+    console.log("submit");
+    e.target.reset();
   };
+
+  const addProductMutation = useMutation(productService.createNewProduct, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("product list");
+    },
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      category: "",
+      description: "",
+      url: "",
+      price: "",
+      rating: "",
+      title: "",
+      stock: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
   useEffect(() => {
     dispatch(toggleShowInput(false));
-    window.scrollTo(0, 0);
-  }, []);
+    setFormData(formik.values);
+  }, [formik.values]);
 
   return (
     <Layout>
@@ -30,55 +81,179 @@ export const AddProduct = (props: Props) => {
             container mx-auto py-10
             "
       >
-        <form
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
           onSubmit={handleSubmit}
-          className="flex flex-col items-center py-5"
         >
-          <label className="text-lg font-bold mb-2">Enter Category</label>
-          <input
-            type="text"
-            className="w-full border border-gray-400 p-2 rounded mb-4"
-          />
+          {({ isSubmitting }) => (
+            <Form className="flex flex-col items-center py-5">
+              <label className="text-lg font-bold mb-1" htmlFor="category">
+                Enter Category
+              </label>
+              <Field
+                type="text"
+                name="category"
+                id="category"
+                value={formik.values.category}
+                onChange={formik.handleChange}
+                placeholder={
+                  formik.touched.category && formik.errors.category
+                    ? formik.errors.category
+                    : "Enter Category"
+                }
+                className={`w-full border border-gray-400 p-2 rounded mb-4 ${
+                  formik.touched.category && formik.errors.category
+                    ? "border-red-500"
+                    : ""
+                }`}
+                onBlur={formik.handleBlur}
+              />
+              <label className="text-lg font-bold mb-1" htmlFor="description">
+                Enter Description
+              </label>
+              <Field
+                type="text"
+                name="description"
+                id="description"
+                value={formik.values.description}
+                onChange={formik.handleChange}
+                placeholder={
+                  formik.touched.description && formik.errors.description
+                    ? formik.errors.description
+                    : "Enter description"
+                }
+                className={`w-full border border-gray-400 p-2 rounded mb-4 ${
+                  formik.touched.description && formik.errors.description
+                    ? "border-red-500"
+                    : ""
+                }`}
+                onBlur={formik.handleBlur}
+              />
 
-          <label className="text-lg font-bold mb-2">Enter Id</label>
-          <input
-            type="text"
-            className="w-full border border-gray-400 p-2 rounded mb-4"
-          />
+              <label className="text-lg font-bold mb-1" htmlFor="url">
+                Enter URL Image
+              </label>
+              <Field
+                type="text"
+                name="url"
+                id="url"
+                value={formik.values.url}
+                onChange={formik.handleChange}
+                placeholder={
+                  formik.touched.url && formik.errors.url
+                    ? formik.errors.url
+                    : "Enter url image"
+                }
+                className={`w-full border border-gray-400 p-2 rounded mb-4 ${
+                  formik.touched.url && formik.errors.url
+                    ? "border-red-500"
+                    : ""
+                }`}
+                onBlur={formik.handleBlur}
+              />
 
-          <label className="text-lg font-bold mb-2">Enter Description</label>
-          <input
-            type="text"
-            className="w-full border border-gray-400 p-2 rounded mb-4"
-          />
+              <label className="text-lg font-bold mb-1" htmlFor="price">
+                Enter Price in $
+              </label>
+              <Field
+                type="text"
+                name="price"
+                id="price"
+                value={formik.values.price}
+                onChange={formik.handleChange}
+                placeholder={
+                  formik.touched.price && formik.errors.price
+                    ? formik.errors.price
+                    : "Enter price"
+                }
+                className={`w-full border border-gray-400 p-2 rounded mb-4 ${
+                  formik.touched.price && formik.errors.price
+                    ? "border-red-500"
+                    : ""
+                }`}
+                onBlur={formik.handleBlur}
+              />
 
-          <label className="text-lg font-bold mb-2">Enter URL Image</label>
-          <input
-            type="text"
-            className="w-full border border-gray-400 p-2 rounded mb-4"
-          />
+              <label className="text-lg font-bold mb-1" htmlFor="rating">
+                Enter Rating
+              </label>
+              <Field
+                type="text"
+                name="rating"
+                id="rating"
+                value={formik.values.rating}
+                onChange={formik.handleChange}
+                placeholder={
+                  formik.touched.rating && formik.errors.rating
+                    ? formik.errors.rating
+                    : "Enter rating"
+                }
+                className={`w-full border border-gray-400 p-2 rounded mb-4 ${
+                  formik.touched.rating && formik.errors.rating
+                    ? "border-red-500"
+                    : ""
+                }`}
+                onBlur={formik.handleBlur}
+              />
 
-          <label className="text-lg font-bold mb-2">Enter Price in $</label>
-          <input
-            type="text"
-            className="w-full border border-gray-400 p-2 rounded mb-4"
-          />
+              <label className="text-lg font-bold mb-1" htmlFor="title">
+                Enter Title
+              </label>
+              <Field
+                type="text"
+                name="title"
+                id="title"
+                value={formik.values.title}
+                onChange={formik.handleChange}
+                placeholder={
+                  formik.touched.title && formik.errors.title
+                    ? formik.errors.title
+                    : "Enter title"
+                }
+                className={`w-full border border-gray-400 p-2 rounded mb-4 ${
+                  formik.touched.title && formik.errors.title
+                    ? "border-red-500"
+                    : ""
+                }`}
+                onBlur={formik.handleBlur}
+              />
 
-          <label className="text-lg font-bold mb-2">Enter Rating</label>
-          <input
-            type="text"
-            className="w-full border border-gray-400 p-2 rounded mb-4"
-          />
-          <label className="text-lg font-bold mb-2">Enter Title</label>
-          <input
-            className="w-full border border-gray-400 p-2 rounded mb-4"
-            type="text"
-          />
-          <input
-            className="bg-gray-500 hover:bg-gray-700 cursor-pointer text-white font-bold py-2 px-4 rounded"
-            type="submit"
-          />
-        </form>
+              <label className="text-lg font-bold mb-1" htmlFor="stock">
+                Enter Stock
+              </label>
+              <Field
+                type="text"
+                name="stock"
+                id="stock"
+                value={formik.values.stock}
+                onChange={formik.handleChange}
+                placeholder={
+                  formik.touched.stock && formik.errors.stock
+                    ? formik.errors.stock
+                    : "Enter stock"
+                }
+                className={`w-full border border-gray-400 p-2 rounded mb-4 ${
+                  formik.touched.stock && formik.errors.stock
+                    ? "border-red-500"
+                    : ""
+                }`}
+                onBlur={formik.handleBlur}
+              />
+              <button
+                className={`bg-gray-500  text-white font-bold py-2 px-4 rounded ${
+                  isSubmitting
+                    ? "opacity-50 bg-gray-800  cursor-not-allowed"
+                    : ""
+                }`}
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </button>
+            </Form>
+          )}
+        </Formik>
       </div>
     </Layout>
   );

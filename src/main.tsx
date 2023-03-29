@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import store, { persistor } from "./store/store";
 import { Cart } from "./pages/cart/Cart";
 import { PersistGate } from "redux-persist/integration/react";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient({
   defaultOptions: {

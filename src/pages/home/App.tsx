@@ -4,19 +4,17 @@ import { ItemList } from "../../components/itemsList/ItemList";
 import Layout from "../../components/layout/Layout";
 import { useParams } from "react-router-dom";
 import {
-  selectFilteredItems,
   selectSortedItems,
   setProducts,
   toggleShowInput,
 } from "../../store/productSlice";
 import { useAppDispatch, useAppSelector } from "../../services/hooks";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export const Home = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const sortedValue = useAppSelector((state) => state.product.sortValue);
-  const { id } = useParams();
-
+  // const allProducts = useAppSelector((state) => state.product.allProducts);
   const products = useAppSelector((state) =>
     selectSortedItems(state, sortedValue)
   );
@@ -27,16 +25,16 @@ export const Home = (): JSX.Element => {
     window.scrollTo(0, 0);
   }, []);
 
-  const {
-    isLoading,
-    isSuccess,
-    data: response,
-    error,
-  } = useQuery("product list", () => productService.getAll(), {
-    onSuccess: (data) => {
-      dispatch(setProducts(data?.data.products));
-    },
-  });
+  const { isSuccess, data: response } = useQuery(
+    "product list",
+    () => productService.getAll(),
+    {
+      refetchOnWindowFocus: true,
+      onSuccess: (data) => {
+        dispatch(setProducts(data?.data.products));
+      },
+    }
+  );
 
   return (
     <Layout>
