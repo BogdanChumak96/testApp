@@ -7,7 +7,7 @@ export const CartItem = ({ product }) => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="border-gray-300 border-2 relative w-full flex items-center">
+    <div className="border-gray-300 border-2 relative  flex items-center min-w-full">
       <img
         className="w-1/6 text-center radius-xl"
         width={80}
