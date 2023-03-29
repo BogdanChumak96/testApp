@@ -32,10 +32,11 @@ const Header = () => {
   return (
     <div
       className="
-        w-4/5 
+      sticky
         py-5
-        sticky
+        px-10
         top-0 
+        container mx-auto
         z-20
         rounded-b-2xl 
         flex 
@@ -95,7 +96,7 @@ const Header = () => {
           className="
             flex 
             flex-col
-            w-1/4
+            w-1/3
             items-start
             justify-center
           bg-white 
@@ -125,7 +126,6 @@ const Header = () => {
       <Link to="/add">
         <BiAddToQueue size={40} />
       </Link>
-      <button onClick={() => dispatch(clearCart())}>clear</button>
     </div>
   );
 };

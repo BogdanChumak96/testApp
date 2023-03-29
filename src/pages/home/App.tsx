@@ -20,6 +20,7 @@ export const Home = (): JSX.Element => {
   const products = useAppSelector((state) =>
     selectSortedItems(state, sortedValue)
   );
+  console.log(products);
 
   useEffect(() => {
     dispatch(toggleShowInput(true));
