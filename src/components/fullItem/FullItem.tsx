@@ -1,14 +1,9 @@
 import { BiPlus } from "react-icons/bi";
-import { Link } from "react-router-dom";
-import { addToFavorites, deleteById } from "../../store/productSlice";
-import { useAppDispatch, useAppSelector } from "../../services/hooks";
-import { RiDeleteBin2Line } from "react-icons/ri";
-import { useMutation, useQueryClient } from "react-query";
-import { productService } from "../../services/product";
+import { addToFavorites } from "../../store/productSlice";
+import { useAppDispatch } from "../../services/hooks";
+import { ProductProps } from "../../common/types";
 
-type Props = {};
-
-export const FullItem = ({ product }: any): JSX.Element => {
+export const FullItem = ({ product }): JSX.Element => {
   const dispatch = useAppDispatch();
 
   return (
