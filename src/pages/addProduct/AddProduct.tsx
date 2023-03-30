@@ -9,34 +9,32 @@ import { productService } from "../../services/product";
 
 const validationSchema = Yup.object().shape({
   category: Yup.string().required("Category is required"),
-  description: Yup.string().required("Description is required"),
-  url: Yup.string().required("URL is required"),
-  price: Yup.number().required("Price is required"),
-  rating: Yup.number().required("Rating is required"),
-  stock: Yup.number().required("Title is required"),
-  title: Yup.string().required("Title is required"),
+  // description: Yup.string().required("Description is required"),
+  // url: Yup.string().required("URL is required"),
+  // price: Yup.number().required("Price is required"),
+  // rating: Yup.number().required("Rating is required"),
+  // stock: Yup.number().required("Title is required"),
+  // title: Yup.string().required("Title is required"),
 });
 
 const initialValues = {
   category: "",
-  description: "",
-  url: "",
-  price: "",
-  rating: "",
-  title: "",
-  stock: "",
+  // description: "",
+  // url: "",
+  // price: "",
+  // rating: "",
+  // title: "",
+  // stock: "",
 };
 
 export const AddProduct = (props: Props) => {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
-  const [formData, setFormData] = useState(initialValues);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    addProductMutation.mutate(formData);
+  const onSubmit = (e, { resetForm }) => {
     console.log("submit");
-    e.target.reset();
+    addProductMutation.mutate(formik.values);
+    resetForm();
   };
 
   const addProductMutation = useMutation(productService.createNewProduct, {
@@ -48,22 +46,20 @@ export const AddProduct = (props: Props) => {
   const formik = useFormik({
     initialValues: {
       category: "",
-      description: "",
-      url: "",
-      price: "",
-      rating: "",
-      title: "",
-      stock: "",
+      // description: "",
+      // url: "",
+      // price: "",
+      // rating: "",
+      // title: "",
+      // stock: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: (values) => {},
   });
 
   useEffect(() => {
     dispatch(toggleShowInput(false));
-    setFormData(formik.values);
+    console.log(formik.isValid);
   }, [formik.values]);
 
   return (
@@ -84,7 +80,7 @@ export const AddProduct = (props: Props) => {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+          onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
             <Form className="flex flex-col items-center py-5">
@@ -109,7 +105,7 @@ export const AddProduct = (props: Props) => {
                 }`}
                 onBlur={formik.handleBlur}
               />
-              <label className="text-lg font-bold mb-1" htmlFor="description">
+              {/* <label className="text-lg font-bold mb-1" htmlFor="description">
                 Enter Description
               </label>
               <Field
@@ -239,12 +235,12 @@ export const AddProduct = (props: Props) => {
                     : ""
                 }`}
                 onBlur={formik.handleBlur}
-              />
+              /> */}
               <button
-                className={`bg-gray-500  text-white font-bold py-2 px-4 rounded ${
+                className={`text-white bg-gray-500 font-bold py-2 px-4 rounded ${
                   isSubmitting
                     ? "opacity-50 bg-gray-800  cursor-not-allowed"
-                    : ""
+                    : "bg-red-500"
                 }`}
                 type="submit"
                 disabled={isSubmitting}

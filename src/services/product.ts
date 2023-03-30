@@ -14,4 +14,11 @@ export const productService = {
   async deleteById(id) {
     return axios.delete(`/products/${id}`);
   },
+  async createNewProduct(body) {
+    return axios.post(`/products/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  },
 };

@@ -16,8 +16,8 @@ export const ItemProduct = ({ product }: any): JSX.Element => {
   const handleDeleteItem = async (id) => {
     await deleteProductMutation.mutate(id);
     dispatch(deleteById(id));
-    console.log("deleted item", id);
-    console.log(products);
+    // console.log("deleted item", id);
+    // console.log(products);
   };
   const dispatch = useAppDispatch();
   return (
