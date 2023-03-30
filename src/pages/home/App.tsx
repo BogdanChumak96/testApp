@@ -23,10 +23,7 @@ export const Home = (): JSX.Element => {
     window.scrollTo(0, 0);
   }, []);
 
-  const {
-    isSuccess,
-    data: response,
-  }: QueryObserverResult<ProductResponse | undefined> = useQuery(
+  const { isSuccess, data: response } = useQuery(
     "product list",
     () => productService.getAll(),
     {
