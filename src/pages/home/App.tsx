@@ -14,11 +14,9 @@ import { useEffect } from "react";
 export const Home = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const sortedValue = useAppSelector((state) => state.product.sortValue);
-  // const allProducts = useAppSelector((state) => state.product.allProducts);
   const products = useAppSelector((state) =>
     selectSortedItems(state, sortedValue)
   );
-  console.log(products);
 
   useEffect(() => {
     dispatch(toggleShowInput(true));
@@ -29,7 +27,6 @@ export const Home = (): JSX.Element => {
     "product list",
     () => productService.getAll(),
     {
-      refetchOnWindowFocus: true,
       onSuccess: (data) => {
         dispatch(setProducts(data?.data.products));
       },

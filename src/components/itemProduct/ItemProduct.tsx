@@ -1,9 +1,24 @@
 import { BiPlus } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import { addToFavorites } from "../../store/productSlice";
-import { useAppDispatch } from "../../services/hooks";
+import { addToFavorites, deleteById } from "../../store/productSlice";
+import { useAppDispatch, useAppSelector } from "../../services/hooks";
+import { RiDeleteBin2Line } from "react-icons/ri";
+import { useMutation, useQueryClient } from "react-query";
+import { productService } from "../../services/product";
 
 export const ItemProduct = ({ product }: any): JSX.Element => {
+  const products = useAppSelector((state) => state.product.allProducts);
+  const queryClient = useQueryClient();
+
+  const deleteProductMutation = useMutation(productService.deleteById, {
+    onSuccess: () => {},
+  });
+  const handleDeleteItem = async (id) => {
+    await deleteProductMutation.mutate(id);
+    dispatch(deleteById(id));
+    console.log("deleted item", id);
+    console.log(products);
+  };
   const dispatch = useAppDispatch();
   return (
     <div
@@ -17,6 +32,7 @@ export const ItemProduct = ({ product }: any): JSX.Element => {
         px-20
         py-10
         w-4/5
+        relative
         items-center 
         bg-white 
         border-solid 
@@ -27,6 +43,13 @@ export const ItemProduct = ({ product }: any): JSX.Element => {
         hover:shadow-lg
         cursor-pointer"
     >
+      <RiDeleteBin2Line
+        size={35}
+        onClick={() => {
+          handleDeleteItem(product.id);
+        }}
+        className="absolute cursor-pointer text-black transform hover:scale-125 transition-all duration-300 hover:text-red-500  top-30 right-10"
+      />
       <Link to={`product/${product.id}`}>
         <h2 className="font-bold">{product.title.toUpperCase()}</h2>
         <img

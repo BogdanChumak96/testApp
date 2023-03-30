@@ -1,7 +1,7 @@
 import { BiPlus } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { addToFavorites, deleteById } from "../../store/productSlice";
-import { useAppDispatch } from "../../services/hooks";
+import { useAppDispatch, useAppSelector } from "../../services/hooks";
 import { RiDeleteBin2Line } from "react-icons/ri";
 import { useMutation, useQueryClient } from "react-query";
 import { productService } from "../../services/product";
@@ -10,18 +10,6 @@ type Props = {};
 
 export const FullItem = ({ product }: any): JSX.Element => {
   const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
-  const deleteProductMutation = useMutation(productService.deleteById, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("product list");
-    },
-  });
-
-  const handleDeleteItem = async (id) => {
-    await deleteProductMutation.mutate(id);
-    dispatch(deleteById(id));
-    console.log("deleted item", id);
-  };
 
   return (
     <div
@@ -47,13 +35,7 @@ export const FullItem = ({ product }: any): JSX.Element => {
         height={400}
         src={product.images[0]}
       />
-      <RiDeleteBin2Line
-        size={35}
-        onClick={() => {
-          handleDeleteItem(product.id);
-        }}
-        className="absolute cursor-pointer text-black transform hover:scale-125 transition-all duration-300 hover:text-red-500  top-30 right-20"
-      />
+
       <p className="italic">{product.description}</p>
       <div className="flex items-center">
         <h5 className="font-bold">{product.price}$</h5>
