@@ -27,7 +27,7 @@ export const Home = (): JSX.Element => {
     "product list",
     () => productService.getAll(),
     {
-      cacheTime: 0,
+      staleTime: Infinity,
       onSuccess: (data) => {
         dispatch(setProducts(data?.data.products));
       },

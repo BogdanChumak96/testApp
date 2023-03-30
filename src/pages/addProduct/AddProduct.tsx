@@ -1,42 +1,37 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout/Layout";
-import { toggleShowInput } from "../../store/productSlice";
+import { addProduct, toggleShowInput } from "../../store/productSlice";
 import { useAppDispatch } from "../../services/hooks";
 import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQueryClient } from "react-query";
 import { productService } from "../../services/product";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   category: Yup.string().required("Category is required"),
-  // description: Yup.string().required("Description is required"),
-  // url: Yup.string().required("URL is required"),
-  // price: Yup.number().required("Price is required"),
-  // rating: Yup.number().required("Rating is required"),
-  // stock: Yup.number().required("Title is required"),
-  // title: Yup.string().required("Title is required"),
+  description: Yup.string().required("Description is required"),
+  url: Yup.string().required("URL is required"),
+  price: Yup.number().required("Price is required"),
+  rating: Yup.number().required("Rating is required"),
+  stock: Yup.number().required("Title is required"),
+  title: Yup.string().required("Title is required"),
 });
 
 const initialValues = {
   category: "",
-  // description: "",
-  // url: "",
-  // price: "",
-  // rating: "",
-  // title: "",
-  // stock: "",
+  description: "",
+  url: "",
+  price: "",
+  rating: "",
+  title: "",
+  stock: "",
 };
 
 export const AddProduct = (props: Props) => {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
-
-  const onSubmit = (e, { resetForm }) => {
-    console.log("submit");
-    addProductMutation.mutate(formik.values);
-    resetForm();
-  };
-
+  const navigate = useNavigate();
   const addProductMutation = useMutation(productService.createNewProduct, {
     onSuccess: () => {
       queryClient.invalidateQueries("product list");
@@ -44,22 +39,35 @@ export const AddProduct = (props: Props) => {
   });
 
   const formik = useFormik({
-    initialValues: {
-      category: "",
-      // description: "",
-      // url: "",
-      // price: "",
-      // rating: "",
-      // title: "",
-      // stock: "",
+    initialValues,
+    validationSchema,
+    onSubmit: (values) => {
+      addProductMutation.mutate({
+        category: values.category,
+        description: values.description,
+        images: [values.url],
+        price: values.price,
+        rating: values.rating,
+        title: values.title,
+        stock: values.stock,
+      });
+      dispatch(
+        addProduct({
+          category: values.category,
+          description: values.description,
+          images: [values.url],
+          price: values.price,
+          rating: values.rating,
+          title: values.title,
+          stock: values.stock,
+        })
+      );
+      navigate("/");
     },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {},
   });
 
   useEffect(() => {
     dispatch(toggleShowInput(false));
-    console.log(formik.isValid);
   }, [formik.values]);
 
   return (
@@ -77,13 +85,12 @@ export const AddProduct = (props: Props) => {
             container mx-auto py-10
             "
       >
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
+        <Formik>
           {({ isSubmitting }) => (
-            <Form className="flex flex-col items-center py-5">
+            <Form
+              onSubmit={formik.handleSubmit}
+              className="flex flex-col items-center py-5"
+            >
               <label className="text-lg font-bold mb-1" htmlFor="category">
                 Enter Category
               </label>
@@ -91,6 +98,7 @@ export const AddProduct = (props: Props) => {
                 type="text"
                 name="category"
                 id="category"
+                {...formik.getFieldProps("category")}
                 value={formik.values.category}
                 onChange={formik.handleChange}
                 placeholder={
@@ -100,12 +108,12 @@ export const AddProduct = (props: Props) => {
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.category && formik.errors.category
-                    ? "border-red-500"
+                    ? "border-red-500 placeholder-red-500"
                     : ""
                 }`}
                 onBlur={formik.handleBlur}
               />
-              {/* <label className="text-lg font-bold mb-1" htmlFor="description">
+              <label className="text-lg font-bold mb-1" htmlFor="description">
                 Enter Description
               </label>
               <Field
@@ -121,7 +129,7 @@ export const AddProduct = (props: Props) => {
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.description && formik.errors.description
-                    ? "border-red-500"
+                    ? "border-red-500 placeholder-red-500"
                     : ""
                 }`}
                 onBlur={formik.handleBlur}
@@ -143,7 +151,7 @@ export const AddProduct = (props: Props) => {
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.url && formik.errors.url
-                    ? "border-red-500"
+                    ? "border-red-500 placeholder-red-500"
                     : ""
                 }`}
                 onBlur={formik.handleBlur}
@@ -165,7 +173,7 @@ export const AddProduct = (props: Props) => {
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.price && formik.errors.price
-                    ? "border-red-500"
+                    ? "border-red-500 placeholder-red-500"
                     : ""
                 }`}
                 onBlur={formik.handleBlur}
@@ -187,7 +195,7 @@ export const AddProduct = (props: Props) => {
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.rating && formik.errors.rating
-                    ? "border-red-500"
+                    ? "border-red-500 placeholder-red-500"
                     : ""
                 }`}
                 onBlur={formik.handleBlur}
@@ -209,7 +217,7 @@ export const AddProduct = (props: Props) => {
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.title && formik.errors.title
-                    ? "border-red-500"
+                    ? "border-red-500 placeholder-red-500"
                     : ""
                 }`}
                 onBlur={formik.handleBlur}
@@ -231,21 +239,21 @@ export const AddProduct = (props: Props) => {
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.stock && formik.errors.stock
-                    ? "border-red-500"
+                    ? "border-red-500 placeholder-red-500"
                     : ""
                 }`}
                 onBlur={formik.handleBlur}
-              /> */}
+              />
               <button
                 className={`text-white bg-gray-500 font-bold py-2 px-4 rounded ${
-                  isSubmitting
+                  formik.isSubmitting
                     ? "opacity-50 bg-gray-800  cursor-not-allowed"
-                    : "bg-red-500"
+                    : "bg-red-500 placeholder-red-500"
                 }`}
                 type="submit"
-                disabled={isSubmitting}
+                disabled={formik.isSubmitting}
               >
-                {isSubmitting ? "Submitting..." : "Submit"}
+                {formik.isSubmitting ? "Submitting..." : "Submit"}
               </button>
             </Form>
           )}

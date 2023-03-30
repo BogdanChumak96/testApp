@@ -1,23 +1,18 @@
 import { BiPlus } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { addToFavorites, deleteById } from "../../store/productSlice";
-import { useAppDispatch, useAppSelector } from "../../services/hooks";
+import { useAppDispatch } from "../../services/hooks";
 import { RiDeleteBin2Line } from "react-icons/ri";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import { productService } from "../../services/product";
 
 export const ItemProduct = ({ product }: any): JSX.Element => {
-  const products = useAppSelector((state) => state.product.allProducts);
-  const queryClient = useQueryClient();
-
   const deleteProductMutation = useMutation(productService.deleteById, {
     onSuccess: () => {},
   });
   const handleDeleteItem = async (id) => {
     await deleteProductMutation.mutate(id);
     dispatch(deleteById(id));
-    // console.log("deleted item", id);
-    // console.log(products);
   };
   const dispatch = useAppDispatch();
   return (

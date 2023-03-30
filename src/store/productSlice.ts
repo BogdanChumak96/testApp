@@ -1,6 +1,9 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
+import { v4 as uuidv4 } from "uuid";
+
+const id = uuidv4();
 
 // Define a type for the slice state
 interface ProductState {
@@ -46,6 +49,10 @@ const productSlice = createSlice({
         (item) => item.id !== action.payload
       );
     },
+    addProduct: (state, action) => {
+      const newProduct = { ...action.payload, id: uuidv4() };
+      state.allProducts.push(newProduct);
+    },
     setProducts: (state, action) => {
       const newProducts = action.payload.filter((product) => {
         return !state.allProducts.some(
@@ -84,6 +91,7 @@ export const {
   setFilterValue,
   setCategory,
   clearCart,
+  addProduct,
   deleteById,
   setSortValue,
 } = productSlice.actions;
