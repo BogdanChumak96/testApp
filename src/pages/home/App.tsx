@@ -14,10 +14,10 @@ import { useEffect } from "react";
 export const Home = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const sortedValue = useAppSelector((state) => state.product.sortValue);
+
   const products = useAppSelector((state) =>
     selectSortedItems(state, sortedValue)
   );
-
   useEffect(() => {
     dispatch(toggleShowInput(true));
     window.scrollTo(0, 0);

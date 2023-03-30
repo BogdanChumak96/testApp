@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout/Layout";
-import { addProduct, toggleShowInput } from "../../store/productSlice";
+import {
+  addProduct,
+  toggleShowInput,
+  updateProductById,
+} from "../../store/productSlice";
 import { useAppDispatch } from "../../services/hooks";
 import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
 import * as Yup from "yup";
@@ -17,6 +21,7 @@ const categories = [
 ];
 
 const validationSchema = Yup.object().shape({
+  id: Yup.number().required("Id is required"),
   category: Yup.string()
     .oneOf(categories, "Invalid category")
     .required("Category is required"),
@@ -29,6 +34,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const initialValues = {
+  id: "",
   category: "",
   description: "",
   url: "",
@@ -38,31 +44,22 @@ const initialValues = {
   stock: "",
 };
 
-export const AddProduct = (props: Props) => {
+export const EditProduct = (props: Props) => {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const addProductMutation = useMutation(productService.createNewProduct, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("product list");
-    },
+
+  const deleteProductMutation = useMutation(productService.updateProduct, {
+    onSuccess: (data) => {},
   });
 
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values) => {
-      addProductMutation.mutate({
-        category: values.category,
-        description: values.description,
-        images: [values.url],
-        price: values.price,
-        rating: values.rating,
-        title: values.title,
-        stock: values.stock,
-      });
-      dispatch(
-        addProduct({
+    onSubmit: async (values) => {
+      deleteProductMutation.mutate({
+        id: values.id,
+        updatedProduct: {
           category: values.category,
           description: values.description,
           images: [values.url],
@@ -70,6 +67,20 @@ export const AddProduct = (props: Props) => {
           rating: values.rating,
           title: values.title,
           stock: values.stock,
+        },
+      });
+      dispatch(
+        updateProductById({
+          updatedPost: {
+            id: values.id,
+            category: values.category,
+            description: values.description,
+            images: [values.url],
+            price: values.price,
+            rating: values.rating,
+            title: values.title,
+            stock: values.stock,
+          },
         })
       );
       navigate("/");
@@ -102,10 +113,31 @@ export const AddProduct = (props: Props) => {
               className="flex flex-col items-center py-5"
             >
               <h1 className="text-2xl font-bold text-center mb-4">
-                Add a new product
+                Edit product
               </h1>
+              <label className="text-lg font-bold mb-1" htmlFor="description">
+                Enter id
+              </label>
+              <Field
+                type="text"
+                name="id"
+                id="id"
+                value={formik.values.id}
+                onChange={formik.handleChange}
+                placeholder={
+                  formik.touched.id && formik.errors.id
+                    ? formik.errors.id
+                    : "Enter id"
+                }
+                className={`w-full border border-gray-400 p-2 rounded mb-4 ${
+                  formik.touched.id && formik.errors.id
+                    ? "border-red-500 placeholder-red-500"
+                    : ""
+                }`}
+                onBlur={formik.handleBlur}
+              />
               <label className="text-lg font-bold mb-1" htmlFor="category">
-                Select Category
+                Change Category
               </label>
               <Field
                 as="select"
@@ -128,7 +160,7 @@ export const AddProduct = (props: Props) => {
                 ))}
               </Field>
               <label className="text-lg font-bold mb-1" htmlFor="description">
-                Enter Description
+                Change Description
               </label>
               <Field
                 type="text"
@@ -139,7 +171,7 @@ export const AddProduct = (props: Props) => {
                 placeholder={
                   formik.touched.description && formik.errors.description
                     ? formik.errors.description
-                    : "Enter description"
+                    : "Change description"
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.description && formik.errors.description
@@ -150,7 +182,7 @@ export const AddProduct = (props: Props) => {
               />
 
               <label className="text-lg font-bold mb-1" htmlFor="url">
-                Enter URL Image
+                Change URL Image
               </label>
               <Field
                 type="text"
@@ -161,7 +193,7 @@ export const AddProduct = (props: Props) => {
                 placeholder={
                   formik.touched.url && formik.errors.url
                     ? formik.errors.url
-                    : "Enter url image"
+                    : "Change url image"
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.url && formik.errors.url
@@ -172,7 +204,7 @@ export const AddProduct = (props: Props) => {
               />
 
               <label className="text-lg font-bold mb-1" htmlFor="price">
-                Enter Price in $
+                Change Price in $
               </label>
               <Field
                 type="text"
@@ -183,7 +215,7 @@ export const AddProduct = (props: Props) => {
                 placeholder={
                   formik.touched.price && formik.errors.price
                     ? formik.errors.price
-                    : "Enter price"
+                    : "Change price"
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.price && formik.errors.price
@@ -194,7 +226,7 @@ export const AddProduct = (props: Props) => {
               />
 
               <label className="text-lg font-bold mb-1" htmlFor="rating">
-                Enter Rating
+                Change Rating
               </label>
               <Field
                 type="text"
@@ -205,7 +237,7 @@ export const AddProduct = (props: Props) => {
                 placeholder={
                   formik.touched.rating && formik.errors.rating
                     ? formik.errors.rating
-                    : "Enter rating"
+                    : "Change rating"
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.rating && formik.errors.rating
@@ -216,7 +248,7 @@ export const AddProduct = (props: Props) => {
               />
 
               <label className="text-lg font-bold mb-1" htmlFor="title">
-                Enter Title
+                Change Title
               </label>
               <Field
                 type="text"
@@ -227,7 +259,7 @@ export const AddProduct = (props: Props) => {
                 placeholder={
                   formik.touched.title && formik.errors.title
                     ? formik.errors.title
-                    : "Enter title"
+                    : "Change title"
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.title && formik.errors.title
@@ -238,7 +270,7 @@ export const AddProduct = (props: Props) => {
               />
 
               <label className="text-lg font-bold mb-1" htmlFor="stock">
-                Enter Stock
+                Change Stock
               </label>
               <Field
                 type="text"
@@ -249,7 +281,7 @@ export const AddProduct = (props: Props) => {
                 placeholder={
                   formik.touched.stock && formik.errors.stock
                     ? formik.errors.stock
-                    : "Enter stock"
+                    : "Change stock"
                 }
                 className={`w-full border border-gray-400 p-2 rounded mb-4 ${
                   formik.touched.stock && formik.errors.stock

@@ -21,4 +21,13 @@ export const productService = {
       body: JSON.stringify(body),
     });
   },
+  async updateProduct({ id, updatedProduct }) {
+    // console.log(updatedProduct);
+
+    return axios.put(`/products/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedProduct),
+    });
+  },
 };

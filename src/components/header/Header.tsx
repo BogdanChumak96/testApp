@@ -8,6 +8,7 @@ import {
   BiChevronUp,
   BiChevronDown,
 } from "react-icons/bi";
+import { AiOutlineEdit } from "react-icons/ai";
 import { RxLetterCaseCapitalize, RxLetterCaseLowercase } from "react-icons/rx";
 import { useAppDispatch, useAppSelector } from "../../services/hooks";
 import {
@@ -51,7 +52,7 @@ const Header = () => {
       {visibleInput && (
         <div className="flex flex-col">
           <div className="flex flex-col items-center justify-center align-center">
-            <span className="mb-1">Category</span>
+            <span className="mb-1"></span>
             <div className="flex gap-2">
               <select onChange={(e) => dispatch(setCategory(e.target.value))}>
                 <option value="All">All</option>
@@ -64,7 +65,7 @@ const Header = () => {
             </div>
           </div>
           <div className="flex flex-col items-center">
-            <span>Sort</span>
+            <span></span>
             <div className="flex gap-2">
               <BiChevronUp
                 onClick={() => handleSortChange("PRICE_ASC")}
@@ -83,7 +84,7 @@ const Header = () => {
               />
               <RxLetterCaseLowercase
                 onClick={() => handleSortChange("ALPHABETICAL_DECS")}
-                className="transform cursor-pointer hover:scale-125 transition-all duration-300"
+                className=" cursor-pointer transform hover:scale-125 transition-all duration-300"
                 size={22}
               />
             </div>
@@ -135,6 +136,12 @@ const Header = () => {
       </Link>
       <Link to="/add">
         <BiAddToQueue
+          className="transform hover:scale-125 transition-all duration-300"
+          size={40}
+        />
+      </Link>
+      <Link to="/edit">
+        <AiOutlineEdit
           className="transform hover:scale-125 transition-all duration-300"
           size={40}
         />

@@ -11,6 +11,7 @@ import store, { persistor } from "./store/store";
 import { Cart } from "./pages/cart/Cart";
 import { PersistGate } from "redux-persist/integration/react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { EditProduct } from "./pages/editProduct/EditProduct";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -37,16 +38,20 @@ const router = createBrowserRouter([
     path: "cart",
     element: <Cart />,
   },
+  {
+    path: "edit",
+    element: <EditProduct />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      {/* <PersistGate loading={null} persistor={persistor}> */}
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-      {/* </PersistGate> */}
+      <PersistGate loading={null} persistor={persistor}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );

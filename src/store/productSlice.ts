@@ -49,6 +49,19 @@ const productSlice = createSlice({
         (item) => item.id !== action.payload
       );
     },
+    updateProductById: (state, action) => {
+      console.log(action)
+      const { updatedPost } = action.payload;
+      const id = updatedPost.id;
+      const index = state.allProducts.findIndex((product) => product.id == id);
+
+      if (index !== -1) {
+        state.allProducts[index] = {
+          ...state.allProducts[index],
+          ...updatedPost,
+        };
+      }
+    },
     addProduct: (state, action) => {
       const newProduct = { ...action.payload, id: uuidv4() };
       state.allProducts.push(newProduct);
@@ -94,6 +107,7 @@ export const {
   addProduct,
   deleteById,
   setSortValue,
+  updateProductById,
 } = productSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
