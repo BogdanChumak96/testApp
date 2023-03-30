@@ -1,8 +1,7 @@
-import { useQuery } from "react-query";
+import { QueryObserverResult, useQuery } from "react-query";
 import { productService } from "../../services/product";
 import { ItemList } from "../../components/itemsList/ItemList";
 import Layout from "../../components/layout/Layout";
-import { useParams } from "react-router-dom";
 import {
   selectSortedItems,
   setProducts,
@@ -10,6 +9,7 @@ import {
 } from "../../store/productSlice";
 import { useAppDispatch, useAppSelector } from "../../services/hooks";
 import { useEffect } from "react";
+import { ProductResponse } from "../../common/types";
 
 export const Home = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -23,7 +23,10 @@ export const Home = (): JSX.Element => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { isSuccess, data: response } = useQuery(
+  const {
+    isSuccess,
+    data: response,
+  }: QueryObserverResult<ProductResponse | undefined> = useQuery(
     "product list",
     () => productService.getAll(),
     {

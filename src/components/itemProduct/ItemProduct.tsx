@@ -5,13 +5,15 @@ import { useAppDispatch } from "../../services/hooks";
 import { RiDeleteBin2Line } from "react-icons/ri";
 import { useMutation } from "react-query";
 import { productService } from "../../services/product";
+import { ProductProps } from "../../common/types";
 
-export const ItemProduct = ({ product }: any): JSX.Element => {
+export const ItemProduct = ({ product }): JSX.Element => {
   const deleteProductMutation = useMutation(productService.deleteById, {
     onSuccess: () => {},
   });
-  const handleDeleteItem = async (id) => {
-    await deleteProductMutation.mutate(id);
+
+  const handleDeleteItem = (id) => {
+    deleteProductMutation.mutate(id);
     dispatch(deleteById(id));
   };
   const dispatch = useAppDispatch();

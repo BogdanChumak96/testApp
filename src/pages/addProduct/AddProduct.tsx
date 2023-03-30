@@ -7,14 +7,8 @@ import * as Yup from "yup";
 import { useMutation, useQueryClient } from "react-query";
 import { productService } from "../../services/product";
 import { useNavigate } from "react-router-dom";
-
-const categories = [
-  "All fragrances",
-  "groceries",
-  "home-decoration",
-  "smartphones",
-  "laptops",
-];
+import { categories } from "../../common/constants";
+import { FormValues } from "../../common/types";
 
 const validationSchema = Yup.object().shape({
   category: Yup.string()
@@ -28,17 +22,17 @@ const validationSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
 });
 
-const initialValues = {
+const initialValues: FormValues = {
   category: "",
   description: "",
   url: "",
-  price: "",
-  rating: "",
+  price: null,
+  rating: null,
   title: "",
-  stock: "",
+  stock: null,
 };
 
-export const AddProduct = (props: Props) => {
+export const AddProduct = () => {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const navigate = useNavigate();

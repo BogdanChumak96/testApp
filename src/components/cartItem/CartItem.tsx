@@ -2,8 +2,9 @@ import React from "react";
 import { BiXCircle } from "react-icons/bi";
 import { useAppDispatch } from "../../services/hooks";
 import { removeFromFavorites } from "../../store/productSlice";
+import { CartItemProps, Product, ProductProps } from "../../common/types";
 
-export const CartItem = ({ product }) => {
+export const CartItem = ({ product }: CartItemProps) => {
   const dispatch = useAppDispatch();
 
   return (

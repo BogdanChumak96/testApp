@@ -30,27 +30,26 @@ const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    setFilterValue: (state, action) => {
+    setFilterValue: (state, action: PayloadAction<string>) => {
       state.filterValue = action.payload;
     },
-    setSortValue: (state, action) => {
+    setSortValue: (state, action: PayloadAction<string>) => {
       state.sortValue = action.payload;
     },
-    setCategory: (state, action) => {
+    setCategory: (state, action: PayloadAction<string>) => {
       state.selectedCategory = action.payload;
     },
-    toggleShowInput: (state, action) => {
+    toggleShowInput: (state, action: PayloadAction<boolean>) => {
       action.payload === true
         ? (state.showInput = true)
         : (state.showInput = false);
     },
-    deleteById: (state, action) => {
+    deleteById: (state, action: PayloadAction<string>) => {
       state.allProducts = state.allProducts.filter(
         (item) => item.id !== action.payload
       );
     },
     updateProductById: (state, action) => {
-      console.log(action)
       const { updatedPost } = action.payload;
       const id = updatedPost.id;
       const index = state.allProducts.findIndex((product) => product.id == id);

@@ -1,7 +1,6 @@
 import ContentLoader from "react-content-loader";
-type Props = {};
 
-const FullItemLoader = (props: Props) => {
+const FullItemLoader = (): JSX.Element => {
   return (
     <div
       className="rounded-2xl
@@ -25,7 +24,6 @@ const FullItemLoader = (props: Props) => {
         viewBox="0 0 450 500"
         backgroundColor="#e3e3e3"
         foregroundColor="#cccccc"
-        {...props}
       >
         <rect x="27" y="57" rx="6" ry="6" width="389" height="385" />
         <rect x="134" y="31" rx="0" ry="0" width="165" height="11" />

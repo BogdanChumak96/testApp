@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { AddProduct } from "../../pages/addProduct/AddProduct";
 import { Link } from "react-router-dom";
 import {
   BiHomeAlt2,
@@ -14,19 +12,18 @@ import { useAppDispatch, useAppSelector } from "../../services/hooks";
 import {
   setFilterValue,
   setSortValue,
-  clearCart,
-  selectSortedItems,
   setCategory,
 } from "../../store/productSlice";
-const Header = () => {
+
+const Header = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const visibleInput = useAppSelector((state) => state.product.showInput);
 
-  const handleSortChange = (sortVal) => {
+  const handleSortChange = (sortVal): void => {
     dispatch(setSortValue(sortVal));
   };
 
-  const handleFilterChange = (event) => {
+  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setFilterValue(event.target.value));
   };
 

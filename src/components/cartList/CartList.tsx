@@ -2,8 +2,9 @@ import { useAppDispatch } from "../../services/hooks";
 import { CartItem } from "../cartItem/CartItem";
 import { TbBucketOff } from "react-icons/tb";
 import { clearCart } from "../../store/productSlice";
+import { CartProps } from "../../common/types";
 
-export const CartList = ({ products }): JSX.Element => {
+export const CartList = ({ products }: CartProps): JSX.Element => {
   const dispatch = useAppDispatch();
 
   return (

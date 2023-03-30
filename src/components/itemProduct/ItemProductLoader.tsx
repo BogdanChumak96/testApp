@@ -1,25 +1,22 @@
 import ContentLoader from "react-content-loader";
-import { Link } from "react-router-dom";
 
-type Props = {};
-
-export const ItemProductLoader = ({ product }: any): JSX.Element => {
+export const ItemProductLoader = (): JSX.Element => {
   return (
     <div
       className="rounded-2xl
-        flex
-        justify-between
-        flex-col 
-        text-center 
-        mx-auto 
-        items-center 
-        bg-white 
-        border-solid 
-        border-1
-      border-sky-500 
-        xs:w-1/2
-        md:w-4/5 
-        lg:w-1/1"
+     flex
+     justify-between
+     flex-col 
+     text-center 
+     mx-auto 
+     items-center 
+     bg-white 
+     border-solid 
+     border-1
+   border-sky-500 
+     xs:w-1/2
+     md:w-4/5 
+     lg:w-1/1"
     >
       <ContentLoader
         speed={2}

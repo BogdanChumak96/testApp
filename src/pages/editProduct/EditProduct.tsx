@@ -1,52 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Layout from "../../components/layout/Layout";
-import {
-  addProduct,
-  toggleShowInput,
-  updateProductById,
-} from "../../store/productSlice";
+import { toggleShowInput, updateProductById } from "../../store/productSlice";
 import { useAppDispatch } from "../../services/hooks";
-import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
-import * as Yup from "yup";
-import { useMutation, useQueryClient } from "react-query";
+import { Formik, Form, Field, useFormik } from "formik";
+import { useMutation } from "react-query";
 import { productService } from "../../services/product";
 import { useNavigate } from "react-router-dom";
+import { FormValues } from "../../common/types";
+import { categories } from "../../common/constants";
+import { validationSchemaEdit } from "../../common/validationsSchema";
 
-const categories = [
-  "All fragrances",
-  "groceries",
-  "home-decoration",
-  "smartphones",
-  "laptops",
-];
-
-const validationSchema = Yup.object().shape({
-  id: Yup.number().required("Id is required"),
-  category: Yup.string()
-    .oneOf(categories, "Invalid category")
-    .required("Category is required"),
-  description: Yup.string().required("Description is required"),
-  url: Yup.string().required("URL is required"),
-  price: Yup.number().required("Price is required"),
-  rating: Yup.number().required("Rating is required"),
-  stock: Yup.number().required("Title is required"),
-  title: Yup.string().required("Title is required"),
-});
-
-const initialValues = {
-  id: "",
+const initialValues: FormValues = {
+  id: null,
   category: "",
   description: "",
   url: "",
-  price: "",
-  rating: "",
+  price: null,
+  rating: null,
   title: "",
-  stock: "",
+  stock: null,
 };
 
-export const EditProduct = (props: Props) => {
+export const EditProduct = () => {
   const dispatch = useAppDispatch();
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const deleteProductMutation = useMutation(productService.updateProduct, {
@@ -55,8 +31,8 @@ export const EditProduct = (props: Props) => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema,
-    onSubmit: async (values) => {
+    validationSchema: validationSchemaEdit,
+    onSubmit: (values) => {
       deleteProductMutation.mutate({
         id: values.id,
         updatedProduct: {
